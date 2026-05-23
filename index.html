@@ -374,7 +374,7 @@
     function isQuietHour() {
         const now = new Date();
         const hours = now.getHours();
-        return hours >= 0 && hours < 6; // с 00:00 до 06:00
+        return true; // Временно всегда тихий час
     }
 
     // Включаем/выключаем режим тихого часа
