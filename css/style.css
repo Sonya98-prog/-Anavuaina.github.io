@@ -171,3 +171,24 @@ footer {
     .item { margin-bottom: 14px; padding-left: 12px; }
     .emoji-illustration { padding: 10px; letter-spacing: 5px; }
 }
+/* ========== ФОН ДЛЯ ГЛАВНОГО ЭКРАНА (ВЫБОР НАСТРОЕНИЯ) ========== */
+body.main-page {
+    background-image: url('../images/backgrounds/main-desktop.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Для мобильных устройств */
+@media (max-width: 768px) {
+    body.main-page {
+        background-image: url('../images/backgrounds/main-mobile.jpg');
+        background-attachment: scroll;
+    }
+}
+
+/* Затемнение при тихом часе (опционально) */
+body.main-page.quiet-hour {
+    backdrop-filter: brightness(0.6) blur(2px);
+}
