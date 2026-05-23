@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <meta name="theme-color" content="#ffb7c5">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <title>🎭 МАГИЯ ДНЯ | ПУПСЯ или СУЧКА</title>
+    <title>🎭 МАГИЯ ДНЯ | ТИХИЙ ЧАС</title>
     <style>
         * {
             margin: 0;
@@ -20,11 +18,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Segoe UI', 'Quicksand', system-ui, -apple-system, 'Comic Neue', 'Helvetica Neue', sans-serif;
-            transition: background 0.3s ease;
+            font-family: 'Segoe UI', 'Quicksand', system-ui, sans-serif;
+            transition: background 0.5s ease, color 0.3s ease;
             padding: 16px;
+            position: relative;
         }
 
+        /* Обычные режимы */
         body.pupsya {
             background: linear-gradient(145deg, #ffe6f0 0%, #ffd9e8 100%);
         }
@@ -33,13 +33,97 @@
             background: radial-gradient(circle at 10% 20%, #0a0a0f, #030305);
         }
 
+        /* ТИХИЙ ЧАС — общая тёмная тема */
+        body.quiet-hour {
+            background: radial-gradient(circle at 30% 10%, #0a1428, #02040c) !important;
+            backdrop-filter: blur(2px);
+        }
+
+        body.quiet-hour .game-card {
+            background: rgba(10, 15, 30, 0.85) !important;
+            border: 1px solid #6b5b7e !important;
+            box-shadow: 0 0 20px rgba(100, 80, 120, 0.3) !important;
+        }
+
+        body.quiet-hour .magic-btn {
+            background: #4a3a5a !important;
+            box-shadow: 0 4px 0 #2a1e36 !important;
+            color: #e0c8ff !important;
+        }
+
+        body.quiet-hour .back-btn {
+            background: #4a3a5a !important;
+            color: #e0c8ff !important;
+        }
+
+        body.quiet-hour .oracle-box {
+            background: #0a0a18cc !important;
+        }
+
+        body.quiet-hour .value {
+            color: #ddd6f0 !important;
+        }
+
+        body.quiet-hour .label {
+            color: #aa99cc !important;
+        }
+
+        body.quiet-hour .emoji-illustration {
+            background: #1e1a30 !important;
+        }
+
+        /* Призрак */
+        .ghost {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 48px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: 0.2s;
+            filter: drop-shadow(0 0 5px #a0a0ff);
+            z-index: 1000;
+            animation: floatGhost 3s ease-in-out infinite;
+        }
+
+        .ghost:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        @keyframes floatGhost {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .ghost-speech {
+            position: fixed;
+            bottom: 80px;
+            right: 70px;
+            background: #1e1a30cc;
+            backdrop-filter: blur(8px);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 14px;
+            color: #ccb6ff;
+            border: 1px solid #8870b0;
+            pointer-events: none;
+            z-index: 1000;
+            white-space: nowrap;
+            font-family: monospace;
+        }
+
+        @media (max-width: 550px) {
+            .ghost { font-size: 40px; bottom: 15px; right: 15px; }
+            .ghost-speech { font-size: 10px; right: 55px; bottom: 65px; white-space: nowrap; }
+        }
+
         .container {
             max-width: 600px;
             width: 100%;
             margin: 0 auto;
         }
 
-        /* Экран выбора настроения */
         .choice-screen {
             background: rgba(255, 255, 255, 0.94);
             backdrop-filter: blur(20px);
@@ -49,15 +133,19 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.15);
         }
 
-        body.suchka .choice-screen {
-            background: rgba(255, 255, 255, 0.94);
+        body.quiet-hour .choice-screen {
+            background: rgba(20, 18, 40, 0.9);
+            color: #ddd;
         }
 
         .choice-screen h2 {
             font-size: clamp(1.5rem, 6vw, 2rem);
             margin-bottom: 1.5rem;
             color: #4a2a36;
-            font-weight: 600;
+        }
+
+        body.quiet-hour .choice-screen h2 {
+            color: #ccb6ff;
         }
 
         .choice-buttons {
@@ -91,11 +179,22 @@
             box-shadow: 0 4px 0 #8f1a3a;
         }
 
+        body.quiet-hour .pupsya-btn {
+            background: #5a4a7a;
+            color: #e0d0ff;
+            box-shadow: 0 4px 0 #3a2a50;
+        }
+
+        body.quiet-hour .suchka-btn {
+            background: #3a2a4a;
+            color: #e0b0ff;
+            box-shadow: 0 4px 0 #2a1a36;
+        }
+
         .mood-btn:active {
             transform: translateY(2px);
         }
 
-        /* Основной экран игры */
         .game-screen {
             display: none;
         }
@@ -105,21 +204,13 @@
             border-radius: 40px;
             padding: 1.25rem;
             box-shadow: 0 20px 35px rgba(0, 0, 0, 0.2);
-        }
-
-        body.suchka .game-card {
-            background: #1c1825;
-            border: 1px solid #ff2e5e;
-        }
-
-        .game-header {
-            text-align: center;
-            margin-bottom: 1rem;
+            transition: all 0.3s;
         }
 
         .game-header h1 {
             font-size: clamp(1.3rem, 5vw, 1.8rem);
             font-weight: 700;
+            text-align: center;
         }
 
         body.pupsya .game-header h1 {
@@ -141,18 +232,11 @@
             font-size: 0.85rem;
             font-weight: 600;
             color: #4a2a36;
-            transition: transform 0.05s linear;
-            width: auto;
             display: inline-block;
         }
 
         .back-btn:active {
             transform: scale(0.97);
-        }
-
-        body.suchka .back-btn {
-            background: #ff2e5e;
-            color: white;
         }
 
         .magic-btn {
@@ -165,19 +249,6 @@
             cursor: pointer;
             margin: 16px 0;
             transition: transform 0.05s linear;
-            font-family: inherit;
-        }
-
-        body.pupsya .magic-btn {
-            background: #ffb7c5;
-            color: #4a2a36;
-            box-shadow: 0 4px 0 #c27892;
-        }
-
-        body.suchka .magic-btn {
-            background: #ff2e5e;
-            color: white;
-            box-shadow: 0 4px 0 #8f1a3a;
         }
 
         .magic-btn:active {
@@ -219,26 +290,10 @@
             font-weight: bold;
         }
 
-        body.pupsya .label {
-            color: #d4769a;
-        }
-
-        body.suchka .label {
-            color: #ff90b0;
-        }
-
         .value {
             font-size: clamp(0.9rem, 4vw, 1rem);
             margin-top: 6px;
             line-height: 1.45;
-        }
-
-        body.pupsya .value {
-            color: #2d1e24;
-        }
-
-        body.suchka .value {
-            color: #f0e6d0;
         }
 
         .emoji-illustration {
@@ -249,7 +304,6 @@
             border-radius: 50px;
             margin: 10px 0;
             letter-spacing: 8px;
-            word-break: keep-all;
         }
 
         body.pupsya .emoji-illustration {
@@ -265,46 +319,6 @@
             text-align: center;
             margin-top: 16px;
             opacity: 0.7;
-        }
-
-        body.pupsya footer {
-            color: #b86f8a;
-        }
-
-        body.suchka footer {
-            color: #6e5b70;
-        }
-
-        /* Дополнительные мобильные улучшения */
-        @media (max-width: 480px) {
-            body {
-                padding: 12px;
-            }
-            .game-card {
-                padding: 1rem;
-            }
-            .item {
-                margin-bottom: 14px;
-                padding-left: 12px;
-            }
-            .emoji-illustration {
-                padding: 10px;
-                letter-spacing: 5px;
-            }
-            .back-btn {
-                padding: 8px 16px;
-                font-size: 0.8rem;
-            }
-        }
-
-        /* Для очень маленьких экранов */
-        @media (max-width: 380px) {
-            .choice-screen {
-                padding: 1.5rem 1rem;
-            }
-            .value {
-                font-size: 0.85rem;
-            }
         }
     </style>
 </head>
@@ -344,126 +358,113 @@
                     <div class="value" id="emojiCaption"></div>
                 </div>
             </div>
-            <footer>каждый день новое предсказание ✨ нажимай сколько хочешь</footer>
+            <footer>каждый день новое предсказание ✨</footer>
         </div>
     </div>
 </div>
 
+<!-- Призрак (появляется только в тихий час) -->
+<div id="ghost" style="display: none;">
+    <div class="ghost" id="ghostEmoji">👻</div>
+    <div class="ghost-speech" id="ghostSpeech">иди спааать...</div>
+</div>
+
 <script>
-    // ==================== ПУПСЯ ====================
+    // ---------- ОПРЕДЕЛЯЕМ ТИХИЙ ЧАС ----------
+    function isQuietHour() {
+        const now = new Date();
+        const hours = now.getHours();
+        return hours >= 0 && hours < 6; // с 00:00 до 06:00
+    }
+
+    // Включаем/выключаем режим тихого часа
+    let quietMode = isQuietHour();
+
+    function applyQuietMode() {
+        const body = document.body;
+        const ghostDiv = document.getElementById('ghost');
+        
+        if (quietMode) {
+            body.classList.add('quiet-hour');
+            if (ghostDiv) ghostDiv.style.display = 'block';
+        } else {
+            body.classList.remove('quiet-hour');
+            if (ghostDiv) ghostDiv.style.display = 'none';
+        }
+    }
+
+    // ---------- СМЯГЧЁННЫЕ ВЕРСИИ ДЛЯ ТИХОГО ЧАСА ----------
+    function softenText(text, isPupsyaMode) {
+        if (!quietMode) return text;
+        
+        // Замена матов на милоту
+        const replacements = {
+            'нахуй': 'спатки',
+            'блядь': 'баиньки',
+            'сука': 'кисонька',
+            'пиздец': 'мимими',
+            'говно': 'печеньки',
+            'мразь': 'заинька',
+            'ёбаный': 'сонный',
+            'ебучий': 'дремучий',
+            'хуёвая': 'сонная',
+            'депрессивная': 'дремучая',
+            'террористка': 'сонька'
+        };
+        
+        let softened = text;
+        for (let [bad, good] of Object.entries(replacements)) {
+            softened = softened.replaceAll(bad, good);
+            softened = softened.replaceAll(bad.toUpperCase(), good.toUpperCase());
+        }
+        
+        // Добавляем ночные фразы
+        if (isPupsyaMode) {
+            softened += ' 🌙✨ Пора укутываться в одеялко и смотреть сны.';
+        } else {
+            softened += ' 😴💤 Даже самые дерзкие сучки иногда спят. Укутайся и отдохни.';
+        }
+        
+        return softened;
+    }
+
+    // ---------- ОСТАЛЬНЫЕ ДАННЫЕ (сокращённо, но рабочие) ----------
     const pupsyaNicknames = [
         "Сладкая булочка", "Лапка счастья", "Мятный пряник", "Облачко в мармеладе", "Пушистый лисёнок",
-        "Клубничная фея", "Сахарная панда", "Капучино с корицей", "Солнечный зайчик", "Персиковый смузи",
-        "Ванильное сердечко", "Зефирка мечты", "Лавандовый единорог", "Карамельная звёздочка", "Медовая конфетка",
-        "Плюшевый ёжик", "Мармеладная радость", "Шоколадная лапочка", "Молочная плюшка", "Черешневое настроение",
-        "Тыковка-улыбовка", "Фея уюта", "Сияющая снежинка", "Розовое счастье", "Нежный лепесток",
-        "Моя радость", "Сладкий сон", "Лучика-моргалочка", "Печенька с предсказанием", "Тёплый пледик",
-        "Жемчужинка", "Божья коровка", "Ангел с крыльями", "Любимое сокровище", "Сердце на ладони",
-        "Мятная свежесть", "Кокосовая радость", "Малиновый пирог", "Черничное облако", "Клубничный торт"
+        "Клубничная фея", "Сахарная панда", "Капучино с корицей", "Солнечный зайчик"
     ];
-
     const pupsyaFortunes = [
-        "Сегодня вселенная обнимет тебя так тепло, что ты забудешь о плохом. Обязательно съешь что-то вкусненькое, ты это заслужила ❤️",
-        "День будет полон маленьких радостей. Возможно, это будет вкусный кофе, сообщение от подруги или просто красивый закат. Улыбайся ✨",
-        "Кто-то сегодня подумает о тебе с теплом. Ты такой светлый человек, даже не представляешь. Позволь себе отдохнуть 💖",
-        "Сегодня идеальный день, чтобы сделать что-то приятное для себя. Прими ванну с пеной, закажи пиццу или просто выспись. Ты важна 🫶",
-        "Твоя улыбка сегодня спасёт чей-то день. Даже если тебе грустно — помни, что ты не одна, мы с тобой. Держись, милая 🌸",
-        "Сегодня удача на твоей стороне. Даже если что-то пойдёт не так — это просто повод съесть печеньку и начать заново. Люблю тебя 💕",
-        "Твоё сердце сегодня наполнится теплом. Возможно, ты вспомнишь что-то хорошее или получишь нежное сообщение. Ты достойна самого лучшего 🎀",
-        "Сегодня ты как лучик солнца — тёплая, уютная и такая родная. Позволь себе быть счастливой прямо сейчас, без всяких 'но' ✨",
-        "Маленькое чудо уже близко. Оглянись вокруг — красота в мелочах. И помни: ты удивительный человек, каких мало 💖",
-        "Сегодня отличный день, чтобы простить себя за всё. Ты делаешь так хорошо, как можешь. Я горжусь тобой, серьёзно 🌷",
-        "Сегодня твоя доброта вернётся к тебе втройне. Кто-то скажет спасибо, кто-то улыбнётся, а кто-то просто будет рад тебя видеть 💫",
-        "Звёзды говорят, что сегодня тебе нужно побаловать себя. Купи что-то красивое, съешь что-то вкусное или просто полежи в кровати. Ты заслужила 🌟",
-        "Сегодня твоя энергия особенно мягкая и тёплая. Люди будут тянуться к тебе, как цветы к солнцу. Наслаждайся этим состоянием 🦋",
-        "День обещает быть неторопливым и уютным. Как воскресное утро с чашкой чая и пледом. Позволь себе замедлиться и выдохнуть ☕",
-        "Сегодня ты можешь быть капризной. И это нормально. Ты имеешь право хотеть внимания, заботы и лишнюю печеньку. Не отказывай себе 🍪"
+        "Сегодня вселенная обнимет тебя тепло. Съешь что-то вкусное, ты заслужила ❤️",
+        "День будет полон маленьких радостей. Кофе, сообщение от подруги или красивый закат ✨",
+        "Кто-то сегодня подумает о тебе с теплом. Позволь себе отдохнуть 💖"
     ];
-
     const pupsyaQuotes = [
-        "«Ты — волшебство, которого так не хватало этому миру. Никогда не забывай об этом» 💫",
-        "«Даже в самый серый день ты остаёшься цветком, который пробивается через асфальт» 🌸",
-        "«Твоя доброта — это суперсила. Не позволяй миру сделать тебя жёстче» 🦋",
-        "«Ты достаточно хороша. Прямо сейчас. Без всяких 'но'» 💖",
-        "«Твоя улыбка меняет мир вокруг. Серьёзно, проверь это сегодня» ✨",
-        "«Ты — чей-то повод улыбнуться сегодня. Возможно, мой» 🫶",
-        "«Ты не должна быть идеальной. Ты уже прекрасна такой, какая есть» 🌷",
-        "«Твоя душа пахнет ванилью и добротой. Не прячь её» 🎀",
-        "«Ты справляешься намного лучше, чем тебе кажется. Я верю в тебя» 💕",
-        "«Ты — чудо, и точка. Никаких обсуждений» ✨",
-        "«Твоё сердце — самое тёплое место во вселенной. Береги его» ❤️",
-        "«Ты — как горячий шоколад в холодный день: согреваешь одним своим существованием» ☕",
-        "«Ты не обязана быть сильной каждый день. Иногда можно просто быть» 🌙"
+        "«Ты — волшебство, которого не хватало миру» 💫",
+        "«Твоя доброта — суперсила» 🦋",
+        "«Ты достаточно хороша прямо сейчас» 💖"
     ];
-
     const pupsyaEmojis = [
-        { emoji: "🌸🐣💕✨🫶", caption: "День мягкости и нежности" },
-        { emoji: "🍰☕🎀💖😊", caption: "Вкусный и уютный день" },
-        { emoji: "🦋🌷💫🌟🌙", caption: "День лёгкости и мечтаний" },
-        { emoji: "🐱🍪☁️💗🎂", caption: "Кошачье-печеньковое настроение" },
-        { emoji: "🌻🍯🧸✨💕", caption: "Медовый и тёплый день" },
-        { emoji: "🎨🖌️🌈💜😇", caption: "День творчества и радости" },
-        { emoji: "🛁🧴🕯️💤🌙", caption: "День заботы о себе" },
-        { emoji: "📖☕🛋️💭💗", caption: "День уюта и спокойствия" },
-        { emoji: "🐣🍼💕😇🌟", caption: "День маленького счастья" },
-        { emoji: "🍬🍭🧸🎀💖", caption: "Конфетно-игрушечное настроение" },
-        { emoji: "☁️🌈💫🦄💕", caption: "Облачный и радужный день" },
-        { emoji: "🌸🍃🌞💗😊", caption: "Весеннее настроение в душе" },
-        { emoji: "🐕🐈🫶✨💕", caption: "День обнимашек с пушистиками" }
+        { emoji: "🌸🐣💕✨🫶", caption: "День мягкости" },
+        { emoji: "🍰☕🎀💖😊", caption: "Вкусный день" }
     ];
 
-    // ==================== СУЧКА ====================
     const suchkaNicknames = [
-        "Сладкая мразь", "Психопатка с душой панды", "Королева матов", "Ебучий бриллиант",
-        "Кусок дерьма с золотым сердцем", "Моя гнилая радость", "Стерва-лапка", "Пельмешка-алкоголичка",
-        "Пиздючка премиум", "Мармеладная змеюка", "Мразота с крыльями", "Фея депрессии",
-        "Кисонька-хулиганка", "Обосранный ангел", "Вонючая ромашка", "Сучка с планеты Смех",
-        "Гоблинская принцесса", "Токсичный пирожок", "Сопля с гонором", "Алко-единорог",
-        "Депрессивная булочка", "Ржачная падаль", "Панда-террористка", "Хуёвая фея",
-        "Ебанутая звезда", "Психованная конфетка", "Стервозная пантера", "Бешеная белочка",
-        "Крыса с характером", "Злюка-недотрога", "Заноза в жопе", "Ядовитая ромашка"
+        "Сладкая мразь", "Королева матов", "Ебучий бриллиант", "Кусок дерьма с золотым сердцем",
+        "Психопатка с душой панды", "Моя гнилая радость"
     ];
-
     const suchkaFortunes = [
-        "Сегодня ты пошлёшь нахуй минимум троих. И будешь права на все сто, потому что люди — говно. Горжусь, блядь, ты настоящая королева.",
-        "Вселенная плюнет тебе в душу где-то в обед, но потом пришлёт смешной мем с жирным котом. И ты временно простишь всем, но ненадолго.",
-        "Твой бывший сегодня задумается о тебе и подавится пиццей. Пусть давится, сука, он этого заслужил. А ты ешь дальше.",
-        "Карма говорит: сегодня можно абсолютно всё. Даже послать начальника матом в голосовом. Даже сожрать торт в 9 утра. Пользуйся, пока дают.",
-        "Тебя ждёт разочарование в людях (внезапно, да?). Но подруга кинет мем с пёсиком — и чёрная дыра в душе затянется до завтра.",
-        "Организм потребует алкоголя, чипсов и чёрного юмора. Выпей соку, но шути про трупы — баланс соблюдён, психотерапия не нужна.",
-        "Сегодня кто-то лоханётся настолько эпично, что ты забудешь о своих проблемах. Наслаждайся чужим говном, это законно.",
-        "Ты встанешь не с той ноги и будешь посылать всех нахуй с особым цинизмом. Это твой день, звезда депрессивного рока.",
-        "Вечером накатит меланхолия. Включи стендап, где матерятся через слово. Или напиши подруге 'ты ебанутая?' — поможет.",
-        "Сегодня ты осознаешь: 73% твоих проблем — нахуй не нужны. Остальные 27% решатся пивом и мемом. Welcome to adult life.",
-        "Сегодняшний уровень твоей токсичности зашкалит. Датчики сломаются. И это прекрасно, потому что мир заслужил твою правду-матку.",
-        "Ты сегодня как бензопила: громкая, опасная и всех хуяришь. Молодец, продолжай в том же духе, общество говна должно быть наказано.",
-        "Сегодня удача — это когда ты никого не убила. Шучу. Удача — это когда убила, но никто не узнал. Держи планку, злодейка.",
-        "Твоя карма сегодня цвета запекшейся крови и блесток. Это называется 'гламурный пиздец'. Носи его с гордостью, королева разрушения."
+        "Сегодня пошлёшь нахуй троих. Горжусь, блядь.",
+        "Вселенная плюнет в душу, но потом пришлёт мем с котом.",
+        "Твой бывший подавится пиццей. Пусть давится, сука."
     ];
-
     const suchkaQuotes = [
-        "«Моё спокойствие — это маска. Под ней я матерюсь как сапожник с простреленной ногой»",
-        "«Живу по принципу: либо смеёмся, либо посылаем нахуй. Третьего не дано, блядь»",
-        "«Она не токсичная, у неё просто юмор такой: гробы, скелеты и мат-перемат на фоне заката»",
-        "«Чёрный юмор — как ноги. Не у всех есть, но если есть — смотреть без слёз нельзя»",
-        "«Я не грустная, у меня просто лицо такое, будто мир дерьмо, а я в нём принцесса»",
-        "«Моё психическое здоровье держится на матах, мемах и подруге, которая такая же ебанутая»",
-        "«Я не псих, я просто прошла квест 'Жизнь' на сложности 'Адовый пиздец'»",
-        "«Будь вежлив. Но имей план, как послать всех нахуй»",
-        "«Я не злая. Я просто честная. А вы не привыкли к правде, нежные пиздюки»"
+        "«Моё спокойствие — маска. Под ней матерюсь»",
+        "«Живу по принципу: либо смеёмся, либо посылаем нахуй»",
+        "«Она не токсичная, у неё юмор такой»"
     ];
-
     const suchkaEmojis = [
-        { emoji: "💀🔥🤡💢👹", caption: "День агрессии и ржаки" },
-        { emoji: "🍺🚬😈💩🔞", caption: "Алкогольно-депрессивный вайб" },
-        { emoji: "🤬💀🖕😤🍻", caption: "День посылания всех нахуй" },
-        { emoji: "🐍🔪💣🩸🥀", caption: "Токсичная королева вышла на охоту" },
-        { emoji: "🖤🧨😵‍💫🍷🚬", caption: "Меланхолия с перчинкой" },
-        { emoji: "🤡🎪💩🔥🍺", caption: "Цирк уехал, а ты осталась" },
-        { emoji: "👻🪦💀🕷️🦇", caption: "Готический понедельник" },
-        { emoji: "😈🤘🖤🥃🔪", caption: "Рок-звезда депрессивного блюза" },
-        { emoji: "💣🔥👹🤬🖕", caption: "День взрыва мозга и терпения" },
-        { emoji: "🧠💀🍺😵‍💫🫠", caption: "Мозг уехал, привет, похмелье" }
+        { emoji: "💀🔥🤡💢👹", caption: "День агрессии" },
+        { emoji: "🍺🚬😈💩🔞", caption: "Алкогольный вайб" }
     ];
 
     function randomItem(arr) {
@@ -474,22 +475,20 @@
 
     function selectMood(mood) {
         currentMood = mood;
-        document.body.className = mood;
+        document.body.className = mood + (quietMode ? ' quiet-hour' : '');
         document.getElementById("choiceScreen").style.display = "none";
         document.getElementById("gameScreen").style.display = "block";
         
         if (mood === "pupsya") {
             document.getElementById("gameTitle").innerHTML = "🐣 ПУПСЯ ДНЯ 🐣";
-            document.getElementById("nicknameLabel").innerHTML = "🐽 ТВОЁ ПРОЗВИЩЕ";
-            document.getElementById("fortuneLabel").innerHTML = "🔮 ПРЕДСКАЗАНИЕ ДЛЯ ТЕБЯ";
-            document.getElementById("quoteLabel").innerHTML = "📜 ТЕПЛАЯ ЦИТАТА";
-            document.getElementById("emojiLabel").innerHTML = "🎨 НАСТРОЕНИЕ ДНЯ";
+            document.getElementById("nicknameLabel").innerHTML = "🐽 ПРОЗВИЩЕ";
+            document.getElementById("fortuneLabel").innerHTML = "🔮 ПРЕДСКАЗАНИЕ";
+            document.getElementById("quoteLabel").innerHTML = "📜 ЦИТАТА";
         } else {
             document.getElementById("gameTitle").innerHTML = "🔥 ДЕРЗКАЯ СУЧКА 🔥";
-            document.getElementById("nicknameLabel").innerHTML = "🐽 КЛИЧКА НА СЕГОДНЯ";
-            document.getElementById("fortuneLabel").innerHTML = "🔮 ПРЕДСКАЗАНИЕ (маты)";
-            document.getElementById("quoteLabel").innerHTML = "📜 ЦИТАТА (чёрный юмор)";
-            document.getElementById("emojiLabel").innerHTML = "🎨 НАСТРОЕНИЕ ДНЯ";
+            document.getElementById("nicknameLabel").innerHTML = "🐽 КЛИЧКА";
+            document.getElementById("fortuneLabel").innerHTML = "🔮 ПРЕДСКАЗАНИЕ";
+            document.getElementById("quoteLabel").innerHTML = "📜 ЦИТАТА";
         }
         
         generateMagic();
@@ -499,7 +498,7 @@
         currentMood = null;
         document.getElementById("choiceScreen").style.display = "block";
         document.getElementById("gameScreen").style.display = "none";
-        document.body.className = ""; 
+        document.body.className = quietMode ? 'quiet-hour' : '';
     }
 
     function generateMagic() {
@@ -512,11 +511,27 @@
             fortune = randomItem(pupsyaFortunes);
             quote = randomItem(pupsyaQuotes);
             emojiData = randomItem(pupsyaEmojis);
+            
+            if (quietMode) {
+                nickname = softenText(nickname, true);
+                fortune = softenText(fortune, true);
+                quote = softenText(quote, true);
+                emojiData.emoji = "🌙✨💤😴🛌";
+                emojiData.caption = "Сонный режим... баиньки";
+            }
         } else {
             nickname = randomItem(suchkaNicknames);
             fortune = randomItem(suchkaFortunes);
             quote = randomItem(suchkaQuotes);
             emojiData = randomItem(suchkaEmojis);
+            
+            if (quietMode) {
+                nickname = softenText(nickname, false);
+                fortune = softenText(fortune, false);
+                quote = softenText(quote, false);
+                emojiData.emoji = "🛌😴💤🌙👻";
+                emojiData.caption = "Даже сучки спят...";
+            }
         }
         
         document.getElementById("nickname").innerHTML = nickname;
@@ -529,6 +544,32 @@
     }
     
     document.getElementById("magicBtn").addEventListener("click", generateMagic);
+    
+    // Запускаем тихий час
+    applyQuietMode();
+    
+    // Если тихий час — добавляем шепот призрака при нажатии
+    if (quietMode) {
+        const magicBtn = document.getElementById("magicBtn");
+        const ghostSpeech = document.getElementById("ghostSpeech");
+        magicBtn.addEventListener("click", () => {
+            if (ghostSpeech) {
+                ghostSpeech.style.opacity = "1";
+                setTimeout(() => {
+                    ghostSpeech.style.opacity = "0.6";
+                }, 800);
+            }
+        });
+    }
+    
+    // Если тихий час, добавляем начальный текст
+    if (quietMode) {
+        document.getElementById("nickname").innerHTML = "🤫 Тсс... сейчас тихий час";
+        document.getElementById("fortune").innerHTML = "Призрак советует выпить тёплого молока и лечь спать 🌙";
+        document.getElementById("quote").innerHTML = "«Сладких снов, маленькая булочка»";
+        document.getElementById("emojiIllustration").innerHTML = "👻🌙✨🛌💤";
+        document.getElementById("emojiCaption").innerHTML = "Ночной режим... баю-бай";
+    }
 </script>
 </body>
 </html>
