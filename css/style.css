@@ -25,6 +25,12 @@ body {
     right: 0;
     padding: 0 16px;
 }
+/* Отдельно для мобильных — можно поменять отступ */
+@media (max-width: 768px) {
+    .container {
+        bottom: 20px;
+    }
+}
 
 /* Экран выбора */
 .choice-screen {
